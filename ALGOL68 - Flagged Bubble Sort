@@ -1,0 +1,53 @@
+#/* 
+    Tanna McClure 5/23/15
+
+    Okay, so I created a flagged bubble sort so that it was an easier algorithm 
+    to use while trying to learn ALGOL. I got it to work, ALGOL really isn't too
+    bad, especially considering how old it is.
+*/#
+
+# Surround text with octothorpe to create a comment #
+# I put the /* because it makes this IDE change the color of the rest of the text on the line to comment color */#
+# some words (like gets, for, true, etc.) are colored and it bugs me if it's in a comment /* gets for true if - much better*/ #
+
+#******************************************************************************#
+#/* Swap function */#
+PROC swap = (REF []INT array, INT first, INT second) VOID:
+(
+    INT temp := array[first];
+    array[first] := array[second];
+    array[second]:= temp
+);
+
+#******************************************************************************#
+#/* Flagged Bubble Sort */#
+PROC bubble = (REF []INT array) VOID: #/* VOID is the return type */#
+(            #/* REF so we can change the array */#                       
+    INT pass := UPB array-1; #/* UPB gets the size of the array */#
+    BOOL sorted := FALSE;
+    FOR i FROM 1 TO UPB array WHILE #/* This while allows us to break out of the loop early if it's sorted */#
+        sorted := TRUE;
+        FOR j FROM 1 TO pass DO
+            IF array[j] > array[j+1] THEN
+                swap(array, j, j+1);
+                sorted := FALSE
+            FI
+        OD;
+        pass-:= 1;
+    NOT sorted DO SKIP OD #/* It's kinda weird, but this is how it breaks out of the for loop early */#
+);
+
+#******************************************************************************#
+main:
+(
+    [10]INT a;
+    
+    FOR i FROM 1 TO UPB a DO
+        a[i] := ROUND(random*1000)
+    OD;
+    
+    print(("Before:", a));
+    bubble(a);
+    print(newline);
+    print(("After: ", a))
+)
