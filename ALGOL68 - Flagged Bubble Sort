@@ -1,6 +1,7 @@
 #/* 
-    Tanna McClure 5/23/15
-
+    Tanna McClure
+    Flagged Bubble Sort  5/23/15
+    
     Okay, so I created a flagged bubble sort so that it was an easier algorithm 
     to use while trying to learn ALGOL. I got it to work, ALGOL really isn't too
     bad, especially considering how old it is.
