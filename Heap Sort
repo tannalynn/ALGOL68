@@ -1,0 +1,63 @@
+#/* 
+    Tanna McClure 5/23/15
+    Heap Sort
+*/#
+
+#******************************************************************************#
+#/* Swap function */#
+PROC swap = (REF []INT array, INT first, INT second) VOID:
+(
+    INT temp := array[first];
+    array[first] := array[second];
+    array[second]:= temp
+);
+
+#******************************************************************************#
+#/* Heap sort Move Down */#
+PROC heapmove = (REF []INT array, INT i, INT last) VOID:
+(
+    INT index := i; #/* Create an index variable that we can alter */#
+    INT larger := (index*2); #/* Get the first child of that index */#
+    
+    WHILE larger <= last DO
+        IF larger < last THEN IF array[larger] < array[larger+1] THEN
+            larger +:= 1 #/* Find larger child */#
+        FI FI;
+        IF array[index] < array[larger] THEN
+            swap(array, index, larger) #/* If the larger child is larger than the parent, swap */#
+        FI;
+        index := larger; #/* set index to new */#
+        larger := (index*2) #/* Get the first child of that index */#
+    OD
+);
+
+
+#******************************************************************************#
+#/* Heap sort */#
+PROC heapsort = (REF []INT array) VOID:
+(
+    FOR i FROM ENTIER((UPB array) / 2) BY -1 WHILE #/* Create the heap */#
+        heapmove(array, i, UPB array);
+    i > 1 DO SKIP OD;    #/* Index starts at 1, not 0 */#
+    
+    FOR i FROM UPB array BY -1 WHILE #/* Sort it! */#
+        swap(array, 1, i); #/* Move the next biggest to it's correct spot */#
+        heapmove(array, 1, i-1); #/* redo the heap */#
+    i > 1 DO SKIP OD
+);
+
+
+#******************************************************************************#
+main:
+(
+    [10]INT a; #/* Coding ground has enough memory to sort up to about 43000-ish */#
+    FOR i FROM 1 TO UPB a DO        #/* Populate array with random numbers */#
+        a[i] := ROUND(random*100) #/* random returns a REAL between 0 and 1 */#
+    OD;                    
+                  
+    print(("Before:", a));
+    print((newline, newline));
+    heapsort(a);
+    print(("After: ", a))
+
+)
