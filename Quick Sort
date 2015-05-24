@@ -16,9 +16,9 @@ PROC swap = (REF []INT array, INT first, INT second) VOID:
 #/* Quick sort 3 arg function */#
 PROC quick = (REF [] INT array, INT first, INT last) VOID:
 (
-    INT smaller := first + 1,
-        larger  := last,
-        pivot   := array[first];
+    INT smaller := first + 1,  #/* make a variable to keep track of the index on the left */#
+        larger  := last, #/* make a variable to keep track of the index on the right */#
+        pivot   := array[first]; #/* the value we are organizing around */#
   
     WHILE smaller <= larger DO
         WHILE (array[smaller] < pivot   AND   smaller < last) DO   
@@ -27,8 +27,8 @@ PROC quick = (REF [] INT array, INT first, INT last) VOID:
         WHILE (array[larger]  > pivot   AND   larger > first) DO   
             larger  -:= 1       #/* Find smaller thing on the right */#
         OD; 
-        IF smaller < larger THEN 
-            swap(array, smaller, larger);
+        IF smaller < larger THEN #/* if the things are on the wrong side of the middle */#
+            swap(array, smaller, larger); #/* Swap them! */#
             smaller +:= 1;
             larger  -:= 1
         ELSE
@@ -36,13 +36,13 @@ PROC quick = (REF [] INT array, INT first, INT last) VOID:
         FI
     OD;
     
-    swap(array, first, larger);
+    swap(array, first, larger); #/* put the pivot in it's correct spot */#
     
     IF first < larger-1 THEN
-        quick(array, first, larger-1)  
+        quick(array, first, larger-1)  #/* Recursively sort the part in front of the pivot  */#
     FI;
     IF last > larger +1 THEN
-        quick(array, larger+1, last)   
+        quick(array, larger+1, last)   #/* Recursively sort the part in behind the pivot  */#
     FI
 );
 
@@ -51,7 +51,7 @@ PROC quick = (REF [] INT array, INT first, INT last) VOID:
 PROC quicksort = (REF []INT array) VOID:
 (
   IF UPB array > 1 THEN
-    quick(array, 1, UPB array)
+    quick(array, 1, UPB array) #/* Call 3 arg quick sort function */#
   FI
 );
 
