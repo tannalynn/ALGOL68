@@ -1,0 +1,70 @@
+#/* 
+    Tanna McClure 5/23/15
+    Quick Sort
+*/#
+
+#******************************************************************************#
+#/* Swap function */#
+PROC swap = (REF []INT array, INT first, INT second) VOID:
+(
+    INT temp := array[first];
+    array[first] := array[second];
+    array[second]:= temp
+);
+
+#******************************************************************************#
+#/* Quick sort 3 arg function */#
+PROC quick = (REF [] INT array, INT first, INT last) VOID:
+(
+    INT smaller := first + 1,
+        larger  := last,
+        pivot   := array[first];
+  
+    WHILE smaller <= larger DO
+        WHILE (array[smaller] < pivot   AND   smaller < last) DO   
+            smaller +:= 1        #/* Find larger thing on the left */#
+        OD;
+        WHILE (array[larger]  > pivot   AND   larger > first) DO   
+            larger  -:= 1       #/* Find smaller thing on the right */#
+        OD; 
+        IF smaller < larger THEN 
+            swap(array, smaller, larger);
+            smaller +:= 1;
+            larger  -:= 1
+        ELSE
+            smaller +:= 1
+        FI
+    OD;
+    
+    swap(array, first, larger);
+    
+    IF first < larger-1 THEN
+        quick(array, first, larger-1)  
+    FI;
+    IF last > larger +1 THEN
+        quick(array, larger+1, last)   
+    FI
+);
+
+#******************************************************************************#
+#/* Quick sort 1 arg function */#
+PROC quicksort = (REF []INT array) VOID:
+(
+  IF UPB array > 1 THEN
+    quick(array, 1, UPB array)
+  FI
+);
+
+#******************************************************************************#
+main:
+(
+    [20]INT a; #/* Coding ground has enough memory to sort up to about 43000-ish */#
+    FOR i FROM 1 TO UPB a DO        #/* Populate array with random numbers */#
+        a[i] := ROUND(random*10000) #/* random returns a REAL between 0 and 1 */#
+    OD;                             
+
+    print(("Before:", a));
+    quicksort(a);
+    print((newline, newline));
+    print(("After: ", a))
+)
