@@ -1,0 +1,54 @@
+#******************************************************************************#
+#/* Radix Sort */#
+PROC radixsort = (REF []INT array) VOID:
+(
+    [UPB array]INT zero;  #/* temporary arrays to hold the ones and zeros buckets */#
+    [UPB array]INT one;  #/* UPB array creates it to be the same size as the array passed in */#
+    BITS mask := 16r01; #/* Mask to get the bit to compare for each loop */#
+    INT zero_index  := 0, #/* Starting these ones at zero because I increment before using them each time */#
+        one_index   := 0,
+        array_index := 1; #/* Starts at one because I increment after */#
+
+    WHILE ABS(mask) > 0 DO #/* Until the mask has been shifted all the way off to the left */#
+        WHILE array_index <= UPB array DO #/* for every element in the array */#
+            IF (BIN(array[array_index]) AND mask) = 16r0 THEN #/* put the elements that have a 0 in the mask position in zeroes array */#
+                zero_index +:= 1;
+                zero[zero_index] := array[array_index]
+            ELSE            #/* otherwise put it into the ones array */#
+                one_index +:= 1;
+                one[one_index] := array[array_index]
+            FI;
+            array_index +:= 1 #/* Incremenet array index to check the next element */#
+        OD;
+        
+        array_index := 1; #/* start array index back at 1 to copy things back into it */#
+        
+        FOR i FROM 1 TO zero_index DO #/* Copy all the elements that were copied into the zeroes back into the array */#
+            array[array_index] := zero[i];
+            array_index +:= 1
+        OD;
+
+        FOR i FROM 1 TO one_index DO #/* Copy all the elements that were copied into the ones back into the array */#
+            array[array_index] := one[i];
+            array_index +:=1
+        OD;
+        
+        array_index := 1; #/* reset the array index to 1 to start over with the next bit position */#
+        zero_index := one_index := 0; #/* reset back to 0 to do loop again */#
+        mask := mask SHL 1 #/* shift the mask 1 bit left */#
+    OD
+);
+
+#******************************************************************************#
+main:
+(
+    [10]INT a;
+    FOR i FROM 1 TO UPB a DO
+        a[i] := ROUND(random*1000)
+    OD;
+    
+    print(("Before:", a));
+    print((newline, newline));
+    radixsort(a);
+    print(("After: ", a))
+)
