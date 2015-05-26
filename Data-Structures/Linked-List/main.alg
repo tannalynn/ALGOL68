@@ -1,10 +1,11 @@
 PR READ "LinkedList.alg" PR;
 
 MODE EMPLOYEE = STRUCT(STRING name, INT salary, INT years);
-MODE DATA = EMPLOYEE;
+MODE DATA = EMPLOYEE; #/* Sets the data type that is in the list */#
 
 
-PROC list visit = (REF DATA data) VOID:
+#/* Function that traversals call for each node in list */#
+PROC list visit = (REF DATA data) VOID:  
 (
     print((
         "EMPLOYEE NAME  :  ", name OF data ,   newline,
@@ -23,19 +24,20 @@ main:
     years OF empl := 148;
     
     LIST list := (NIL, NIL);
-    
-    
-    append(list, empl); 
+
+    list PREPEND empl; 
     name OF empl := "two";
-    append(list, empl); 
+    list APPEND empl; 
     name OF empl := "three";
-    append(list, empl); 
+    list APPEND empl; 
     name OF empl := "four";
-    append(list, empl); 
+    list APPEND empl; 
 
-
-    forward traversal(list)
+    forward traversal(list);
+    PURGE list;
+    forward traversal(list);
+    print(".")
+    
+    
+    
 )
-
-
-
