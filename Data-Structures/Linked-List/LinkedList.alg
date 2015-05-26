@@ -1,10 +1,10 @@
-MODE EMPLOYEE = STRUCT(STRING name, INT salary, INT years);
-MODE NODE = STRUCT(EMPLOYEE data, REF NODE prev, REF NODE next);
+
+MODE NODE = STRUCT(DATA data, REF NODE prev, REF NODE next);
 MODE LIST = STRUCT(REF NODE head, REF NODE tail);
 
 #******************************************************************************#
 #/* Adds a node to the beginning of the list */#
-PROC prepend = (REF LIST list, EMPLOYEE data) VOID:
+PROC prepend = (REF LIST list, DATA data) VOID:
 (
     HEAP NODE n := (data, NIL, NIL);
     IF head OF list IS REF NODE(NIL) THEN
@@ -16,7 +16,7 @@ PROC prepend = (REF LIST list, EMPLOYEE data) VOID:
 );
 #******************************************************************************#
 #/* Adds a node to the end of the list */#
-PROC append = (REF LIST list, EMPLOYEE data) VOID:
+PROC append = (REF LIST list, DATA data) VOID:
 (
     HEAP NODE n := (data, NIL, NIL);
     IF head OF list IS REF NODE(NIL) THEN
@@ -26,41 +26,43 @@ PROC append = (REF LIST list, EMPLOYEE data) VOID:
         next OF tail OF list := tail OF list := n
     FI
 );
+
+
 #******************************************************************************#
 #/* removes the node at the end of the list */#
-PROC remove last = (REF LIST list) EMPLOYEE:
+PROC remove last = (REF LIST list) DATA:
 (
-    EMPLOYEE emp := data OF tail OF list;
+    DATA emp := data OF tail OF list;
     next OF prev OF tail OF list := NIL;
     tail OF list := prev OF tail OF list;
     emp
 );
 #******************************************************************************#
 #/* removes the node at the end of the list */#
-PROC remove first = (REF LIST list) EMPLOYEE:
+PROC remove first = (REF LIST list) DATA:
 (
-    EMPLOYEE emp := data OF head OF list;
+    DATA emp := data OF head OF list;
     prev OF next OF head OF list := NIL;
     head OF list := next OF head OF list;
     emp
 );
+
+
 #******************************************************************************#
 #/* returns the data at the end of the list */#
-PROC get last = (REF LIST list) EMPLOYEE: (  data OF tail OF list  );
+PROC get last = (REF LIST list) DATA: (  data OF tail OF list  );
 #******************************************************************************#
 #/* returns the data at the front of the list */#
-PROC get first = (REF LIST list) EMPLOYEE: (  data OF head OF list  );
+PROC get first = (REF LIST list) DATA: (  data OF head OF list  );
+
+
 #******************************************************************************#
 #/* Traverses through the list forwards */#
 PROC forward traversal = (LIST list) VOID:
 (
     REF NODE travel := head OF list;
     WHILE travel ISNT REF NODE(NIL) DO
-        print((
-                "EMPLOYEE NAME  :  ", name OF data OF travel,   newline,
-                "         SALARY: " , salary OF data OF travel, newline,
-                "         YEARS : " , years OF data OF travel,  newline
-            ));
+        list visit(data OF travel);
         travel := next OF travel
     OD
 );
@@ -70,37 +72,7 @@ PROC backward traversal = (LIST list) VOID:
 (
     REF NODE travel := tail OF list;
     WHILE travel ISNT REF NODE(NIL) DO
-        print((
-                "EMPLOYEE NAME  :  ", name OF data OF travel,   newline,
-                "         SALARY: " , salary OF data OF travel, newline,
-                "         YEARS : " , years OF data OF travel,  newline
-            ));
+        list visit(data OF travel);
         travel := prev OF travel
     OD
-);
-
-#******************************************************************************#
-main:
-(
-    EMPLOYEE empl;
-    name OF empl := "one";
-    salary OF empl := 50;
-    years OF empl := 148;
-    
-    LIST list := (NIL, NIL);
-    
-    
-    append(list, empl); 
-    name OF empl := "two";
-    append(list, empl); 
-    name OF empl := "three";
-    append(list, empl); 
-    name OF empl := "four";
-    append(list, empl); 
-
-    EMPLOYEE e := remove first(list);
-    print(name OF e)
-   # backward traversal(list)#
 )
-
-
