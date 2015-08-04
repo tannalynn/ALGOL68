@@ -1,3 +1,4 @@
+#/* Tanna McClure */#
 PR READ "LinkedList.alg" PR;
 
 MODE EMPLOYEE = STRUCT(STRING name, INT salary, INT years);
