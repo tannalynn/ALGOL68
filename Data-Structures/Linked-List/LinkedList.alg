@@ -1,3 +1,4 @@
+#/* Tanna McClure */#
 #/* Linked List file */#
 
 #/*--- Node structure - contains next and prev NODE pointers and DATA ---*/#
